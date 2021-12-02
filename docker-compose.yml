@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  rb-srv:
+    image: node:14-alpine
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 4G
+    container_name: 'rb_demo_srv'
+    ports:
+      - 4000:4000
+    user: node
+    volumes:
+      - './srv:/app'
+    working_dir: /app
+    tty: true
+    command: ash -c "npm install && npm start"
+    networks:
+      dockernet: null
+  rb-client:
+    image: node:14-alpine
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 4G
+    container_name: 'rb_demo_client'
+    ports:
+      - 3000:3000
+    user: node
+    volumes:
+      - './client:/app'
+    working_dir: /app
+    tty: true
+    command: ash -c "npm install && npm start"
+    networks:
+      dockernet: null
+networks:
+  dockernet:
+    external:
+      name: dockernet
